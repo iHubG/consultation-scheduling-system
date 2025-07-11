@@ -1,26 +1,12 @@
-import { useEffect } from 'react';
+import React from 'react'
+import { Link, Outlet } from 'react-router-dom';
 
-function App() {
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/test', {
-      credentials: 'include', // for cookie auth (optional for now)
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        alert(data.message);
-      })
-      .catch(err => {
-        console.error('Error connecting to backend:', err);
-      });
-  }, []);
-
-
+const App = () => {
   return (
-    <div className="App">
-      <h1>Testing backend connection...</h1>
+    <div>
+      <Outlet /> 
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
