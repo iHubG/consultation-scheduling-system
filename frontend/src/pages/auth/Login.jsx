@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
@@ -52,8 +52,8 @@ const Login = () => {
 
         // Navigate to dashboard based on role
         setTimeout(() => {
-          if (role === 'admin') navigate('/admin');
-          else if (role === 'faculty') navigate('/faculty');
+          if (role === 'admin') navigate('/admin/dashboard');
+          else if (role === 'faculty') navigate('/faculty/dashboard');
           else navigate('/student/dashboard');
         }, 1500);
       } else {
@@ -64,7 +64,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-100 flex justify-center items-center px-4">
+    <div className="min-h-screen bg-purple-100 flex justify-center items-start lg:items-center pt-5 px-4">
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-md p-8 w-full max-w-md"
@@ -148,6 +148,14 @@ const Login = () => {
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
+        <Link
+          to="/"
+          className="mt-3 block text-center w-full border border-purple-500 text-purple-700 py-3 rounded-md hover:bg-purple-100 transition duration-200"
+        >
+          Back to Home
+        </Link>
+
+        
       </form>
     </div>
   );

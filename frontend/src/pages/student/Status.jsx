@@ -1,24 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from '../../lib/axios';
+import StatusBadge from '../../components/StatusBadge';
+import Spinner from '../../components/InlineSpinner';
+
+// Sample data for development/testing before backend is ready
+const sampleData = [
+  {
+    id: 1,
+    building: 'Main Hall',
+    room: '101',
+    date: '2025-07-15',
+    timeSlot: '09:00 - 10:00',
+    status: 'Pending',
+  },
+  {
+    id: 2,
+    building: 'Science Block',
+    room: '203',
+    date: '2025-07-16',
+    timeSlot: '11:00 - 12:00',
+    status: 'Approved',
+  },
+  {
+    id: 3,
+    building: 'Library',
+    room: '5A',
+    date: '2025-07-17',
+    timeSlot: '14:00 - 15:00',
+    status: 'Rejected',
+  },
+];
 
 const Status = () => {
-  const consultationRequests = [
-    {
-      id: 1,
-      building: 'Ramon Magsaysay Building',
-      room: 'Room 101',
-      date: '2025-07-15',
-      timeSlot: '10:00 AM - 11:00 AM',
-      status: 'Approved',
-    },
-    {
-      id: 2,
-      building: 'IT New Building',
-      room: 'Lab A',
-      date: '2025-07-17',
-      timeSlot: '02:00 PM - 03:00 PM',
-      status: 'Pending Approval',
-    },
-  ];
+  const [consultationRequests, setConsultationRequests] = useState(sampleData);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get('/student/consultations')
+      .then(res => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setConsultationRequests(res.data);
+        } else {
+          // if backend returns empty or invalid, keep sample data
+          setConsultationRequests(sampleData);
+        }
+      })
+      .catch(() => {
+        // On error, fallback to sample data
+        setConsultationRequests(sampleData);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="mt-20">
+        <Spinner />
+      </div>
+    );
+  }
+
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto bg-white rounded shadow mt-5">
@@ -51,17 +92,7 @@ const Status = () => {
                       <td className="py-2 px-4">{date}</td>
                       <td className="py-2 px-4">{timeSlot}</td>
                       <td className="py-2 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${
-                            status === 'Approved'
-                              ? 'bg-green-100 text-green-700'
-                              : status === 'Rejected'
-                              ? 'bg-red-100 text-red-700'
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}
-                        >
-                          {status}
-                        </span>
+                        <StatusBadge status={status} />
                       </td>
                     </tr>
                   )
@@ -96,17 +127,7 @@ const Status = () => {
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Status:</span>{' '}
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        status === 'Approved'
-                          ? 'bg-green-100 text-green-700'
-                          : status === 'Rejected'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}
-                    >
-                      {status}
-                    </span>
+                    <StatusBadge status={status} />
                   </div>
                 </div>
               )

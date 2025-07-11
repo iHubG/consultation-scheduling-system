@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
@@ -91,7 +91,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-100 flex justify-center items-center px-4">
+    <div className="min-h-screen bg-purple-100 flex justify-center items-start lg:items-center px-4 p-5">
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-md p-8 w-full max-w-md"
@@ -151,34 +151,34 @@ const Register = () => {
         </div>
 
         {/* Password Input */}
-<div className="mb-4">
-  <div className="relative">
-    <input
-      type={showPassword ? 'text' : 'password'}
-      name="password"
-      placeholder="Password"
-      value={formData.password}
-      onChange={handleChange}
-      className={`w-full px-4 py-2 pr-10 border rounded focus:ring-2 outline-none ${
-        errors.password
-          ? 'border-red-500 focus:ring-red-300'
-          : 'border-gray-300 focus:ring-purple-300'
-      }`}
-    />
-    <button
-      type="button"
-      onClick={() => setShowPassword((prev) => !prev)}
-      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-700"
-      tabIndex={-1}
-      aria-label={showPassword ? 'Hide password' : 'Show password'}
-    >
-      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-    </button>
-  </div>
-  {errors.password && (
-    <p className="text-red-600 text-sm mt-1">{errors.password}</p>
-  )}
-</div>
+        <div className="mb-4">
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 pr-10 border rounded focus:ring-2 outline-none ${
+                errors.password
+                  ? 'border-red-500 focus:ring-red-300'
+                  : 'border-gray-300 focus:ring-purple-300'
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-700"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-red-600 text-sm mt-1">{errors.password}</p>
+          )}
+        </div>
 
 
         {/* Role */}
@@ -231,6 +231,13 @@ const Register = () => {
         >
           {loading ? 'Registering...' : 'Register'}
         </button>
+
+        <Link
+          to="/"
+          className="mt-3 block text-center w-full border border-purple-500 text-purple-700 py-3 rounded-md hover:bg-purple-100 transition duration-200"
+        >
+          Back to Home
+        </Link>
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-purple-200 flex items-start lg:items-center justify-center px-4 p-5">
       <div className="bg-white rounded-xl shadow-xl p-10 max-w-md w-full text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-purple-700 mb-4">
           Consultation Scheduling System

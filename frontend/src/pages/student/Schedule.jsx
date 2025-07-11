@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from '../../lib/axios';
+import SelectField from '../../components/SelectField';
 
 const Schedule = () => {
   const [buildings, setBuildings] = useState([]);
@@ -44,25 +46,37 @@ const Schedule = () => {
     '03:00 PM - 04:00 PM',
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
     if (!selectedBuilding || !selectedRoom || !selectedDate || !timeSlot) {
-      alert('Please select building, room, date, and time slot.');
-      return;
+      alert('Please select building, room, date, and time slot.')
+      return
     }
 
-    // TODO: Submit to backend
+    try {
+      const payload = {
+        building: selectedBuilding,
+        room: selectedRoom,
+        date: selectedDate,
+        time_slot: timeSlot,
+      }
 
-    setSuccessMsg(
-      `Consultation scheduled on ${selectedDate} at ${timeSlot} in ${selectedRoom}, ${selectedBuilding}.`
-    );
+      await axios.post('/student/schedule', payload)
 
-    // Reset form
-    setSelectedBuilding('');
-    setSelectedRoom('');
-    setSelectedDate('');
-    setTimeSlot('');
+      setSuccessMsg(
+        `Consultation scheduled on ${selectedDate} at ${timeSlot} in ${selectedRoom}, ${selectedBuilding}.`
+      )
+
+      // Reset
+      setSelectedBuilding('')
+      setSelectedRoom('')
+      setSelectedDate('')
+      setTimeSlot('')
+    } catch (err) {
+      alert('Something went wrong. Please try again.')
+      console.error(err)
+    }
   };
 
   return (
@@ -79,67 +93,44 @@ const Schedule = () => {
 
       <form onSubmit={handleSubmit}>
         {/* Building */}
-        <label className="block mb-4 font-medium text-gray-700">
-          Select Building:
-          <select
-            className="w-full mt-1 p-2 border rounded focus:ring-purple-300 outline-none"
-            value={selectedBuilding}
-            onChange={(e) => setSelectedBuilding(e.target.value)}
-          >
-            <option value="">-- Choose a building --</option>
-            {buildings.map((b) => (
-              <option key={b.name} value={b.name}>
-                {b.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField
+          label="Select Building:"
+          value={selectedBuilding}
+          onChange={(e) => setSelectedBuilding(e.target.value)}
+          options={buildings.map(b => b.name)}
+          placeholder="-- Choose a building --"
+        />
 
         {/* Room */}
-        <label className="block mb-4 font-medium text-gray-700">
-          Select Room:
-          <select
-            className="w-full mt-1 p-2 border rounded focus:ring-purple-300 outline-none"
-            value={selectedRoom}
-            onChange={(e) => setSelectedRoom(e.target.value)}
-            disabled={!rooms.length}
-          >
-            <option value="">-- Choose a room --</option>
-            {rooms.map((room) => (
-              <option key={room} value={room}>
-                {room}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField
+          label="Select Room:"
+          value={selectedRoom}
+          onChange={(e) => setSelectedRoom(e.target.value)}
+          options={rooms}
+          disabled={!rooms.length}
+        />
 
         {/* Date */}
         <label className="block mb-4 font-medium text-gray-700">
           Select Date:
           <input
             type="date"
+            min={new Date().toISOString().split('T')[0]}
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
             className="w-full mt-1 p-2 border rounded focus:ring-purple-300 outline-none"
           />
+
         </label>
 
         {/* Time Slot */}
-        <label className="block mb-6 font-medium text-gray-700">
-          Select Time Slot:
-          <select
-            className="w-full mt-1 p-2 border rounded focus:ring-purple-300 outline-none"
-            value={timeSlot}
-            onChange={(e) => setTimeSlot(e.target.value)}
-          >
-            <option value="">-- Choose a time slot --</option>
-            {timeSlots.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField
+          label="Select Time Slot:"
+          value={timeSlot}
+          onChange={(e) => setTimeSlot(e.target.value)}
+          options={timeSlots}
+          placeholder="-- Choose a time slot --"
+        />
 
         {/* Submit */}
         <button
