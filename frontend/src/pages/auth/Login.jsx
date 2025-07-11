@@ -54,7 +54,7 @@ const Login = () => {
         setTimeout(() => {
           if (role === 'admin') navigate('/admin');
           else if (role === 'faculty') navigate('/faculty');
-          else navigate('/student');
+          else navigate('/student-dashboard');
         }, 1500);
       } else {
         setError('Invalid email or password.');
