@@ -23,22 +23,21 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
-      { path: '*', element: <NotFound /> },
+      { path: '*', element: <NotFound /> }, 
     ],
   },
-
-  
   {
     path: '/student',
-    element: <StudentLayout />, // or some layout with Navbar
+    element: <StudentLayout />,
     children: [
       { path: 'dashboard', element: <StudentDashboard /> },
       { path: 'schedule', element: <StudentSchedule /> },
       { path: 'status', element: <StudentStatus /> },
       { path: 'profile', element: <StudentProfile /> },
-      { path: 'change-password', element: <ChangePassword /> }
+      { path: 'change-password', element: <ChangePassword /> },
+      { path: '*', element: <NotFound /> }, 
     ],
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
