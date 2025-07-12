@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../lib/axios';
 import SelectField from '../../components/SelectField';
 
-const Schedule = () => {
+const SetAvailability = () => {
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [selectedBuilding, setSelectedBuilding] = useState('');
@@ -10,11 +10,7 @@ const Schedule = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  
-  // Availability fetched from backend
-  const [availability, setAvailability] = useState([]);
 
-  // All possible time slots
   const timeSlots = [
     '08:00 AM - 09:00 AM',
     '09:00 AM - 10:00 AM',
@@ -26,7 +22,7 @@ const Schedule = () => {
   ];
 
   useEffect(() => {
-    // Static building/room data or fetch from API
+    // Static fallback building/room list (can be replaced with API)
     const data = [
       {
         name: 'Ramon Magsaysay Building',
@@ -49,42 +45,13 @@ const Schedule = () => {
       setRooms([]);
       setSelectedRoom('');
     }
-    setTimeSlot(''); // reset time slot on building change
   }, [selectedBuilding, buildings]);
-
-  // Fetch availability every time building, room or date changes
-  useEffect(() => {
-    if (selectedBuilding && selectedRoom && selectedDate) {
-      axios.get('/faculty/availability', {
-        params: {
-          building: selectedBuilding,
-          room: selectedRoom,
-          date: selectedDate,
-        }
-      })
-      .then(res => setAvailability(res.data))
-      .catch(err => {
-        console.error('Failed to fetch availability:', err);
-        setAvailability([]);
-      });
-      setTimeSlot(''); // reset time slot when availability changes
-    } else {
-      setAvailability([]);
-      setTimeSlot('');
-    }
-  }, [selectedBuilding, selectedRoom, selectedDate]);
-
-  // Filter time slots based on faculty availability
-  // Assuming availability data is like [{ time_slot: '08:00 AM - 09:00 AM' }, ...]
-  const availableTimeSlots = timeSlots.filter(slot =>
-    availability.some(avail => avail.time_slot === slot)
-  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedBuilding || !selectedRoom || !selectedDate || !timeSlot) {
-      alert('Please select building, room, date, and time slot.');
+      alert('Please complete all fields.');
       return;
     }
 
@@ -96,10 +63,10 @@ const Schedule = () => {
         time_slot: timeSlot,
       };
 
-      await axios.post('/student/schedule', payload);
+      await axios.post('/faculty/availability', payload);
 
       setSuccessMsg(
-        `Consultation scheduled on ${selectedDate} at ${timeSlot} in ${selectedRoom}, ${selectedBuilding}.`
+        `Availability set for ${selectedDate} at ${timeSlot} in ${selectedRoom}, ${selectedBuilding}.`
       );
 
       // Reset form
@@ -107,17 +74,16 @@ const Schedule = () => {
       setSelectedRoom('');
       setSelectedDate('');
       setTimeSlot('');
-      setAvailability([]);
     } catch (err) {
-      alert('Something went wrong. Please try again.');
       console.error(err);
+      alert('Failed to set availability. Please try again.');
     }
   };
 
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded shadow mt-5">
       <h2 className="text-2xl font-semibold mb-4 text-purple-700">
-        Schedule Consultation
+        Set Consultation Availability
       </h2>
 
       {successMsg && (
@@ -131,8 +97,8 @@ const Schedule = () => {
         <SelectField
           label="Select Building:"
           value={selectedBuilding}
-          onChange={e => setSelectedBuilding(e.target.value)}
-          options={buildings.map(b => b.name)}
+          onChange={(e) => setSelectedBuilding(e.target.value)}
+          options={buildings.map((b) => b.name)}
           placeholder="-- Choose a building --"
         />
 
@@ -140,7 +106,7 @@ const Schedule = () => {
         <SelectField
           label="Select Room:"
           value={selectedRoom}
-          onChange={e => setSelectedRoom(e.target.value)}
+          onChange={(e) => setSelectedRoom(e.target.value)}
           options={rooms}
           disabled={!rooms.length}
         />
@@ -152,8 +118,9 @@ const Schedule = () => {
             type="date"
             min={new Date().toISOString().split('T')[0]}
             value={selectedDate}
-            onChange={e => setSelectedDate(e.target.value)}
+            onChange={(e) => setSelectedDate(e.target.value)}
             className="w-full mt-1 p-2 border rounded focus:ring-purple-300 outline-none"
+            required
           />
         </label>
 
@@ -161,29 +128,20 @@ const Schedule = () => {
         <SelectField
           label="Select Time Slot:"
           value={timeSlot}
-          onChange={e => setTimeSlot(e.target.value)}
-          options={availableTimeSlots}
-          placeholder={
-            selectedBuilding && selectedRoom && selectedDate
-              ? availableTimeSlots.length > 0
-                ? '-- Choose a time slot --'
-                : 'No available time slots'
-              : 'Select building, room, and date first'
-          }
-          disabled={availableTimeSlots.length === 0}
+          onChange={(e) => setTimeSlot(e.target.value)}
+          options={timeSlots}
+          placeholder="-- Choose a time slot --"
         />
 
-        {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition cursor-pointer"
-          disabled={availableTimeSlots.length === 0}
+          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
         >
-          Schedule
+          Set Availability
         </button>
       </form>
     </div>
   );
 };
 
-export default Schedule;
+export default SetAvailability;

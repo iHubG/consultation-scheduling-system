@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from '../components/FacultyNavbar';
+import Navbar from '../components/AdminSidebar';
 import { Outlet } from 'react-router-dom';
 
-const FacultyLayout = () => (
+const AdminLayout = () => (
   <div>
     <Navbar />
     <main>
@@ -11,4 +11,4 @@ const FacultyLayout = () => (
   </div>
 );
 
-export default FacultyLayout;
+export default AdminLayout;

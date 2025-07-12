@@ -12,6 +12,7 @@ const sampleData = [
     date: '2025-07-15',
     timeSlot: '09:00 - 10:00',
     status: 'Pending',
+    purpose: 'Discuss project progress',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const sampleData = [
     date: '2025-07-16',
     timeSlot: '11:00 - 12:00',
     status: 'Approved',
+    purpose: 'Clarify lab assignment details',
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const sampleData = [
     date: '2025-07-17',
     timeSlot: '14:00 - 15:00',
     status: 'Rejected',
+    purpose: 'Thesis consultation',
   },
 ];
 
@@ -36,17 +39,16 @@ const Status = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/student/consultations')
-      .then(res => {
+    axios
+      .get('/student/consultations')
+      .then((res) => {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setConsultationRequests(res.data);
         } else {
-          // if backend returns empty or invalid, keep sample data
           setConsultationRequests(sampleData);
         }
       })
       .catch(() => {
-        // On error, fallback to sample data
         setConsultationRequests(sampleData);
       })
       .finally(() => setLoading(false));
@@ -59,7 +61,6 @@ const Status = () => {
       </div>
     );
   }
-
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto bg-white rounded shadow mt-5">
@@ -80,17 +81,19 @@ const Status = () => {
                   <th className="text-left py-2 px-4 border-b">Room</th>
                   <th className="text-left py-2 px-4 border-b">Date</th>
                   <th className="text-left py-2 px-4 border-b">Time Slot</th>
+                  <th className="text-left py-2 px-4 border-b">Purpose</th>
                   <th className="text-left py-2 px-4 border-b">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {consultationRequests.map(
-                  ({ id, building, room, date, timeSlot, status }) => (
+                  ({ id, building, room, date, timeSlot, status, purpose }) => (
                     <tr key={id} className="hover:bg-gray-50">
                       <td className="py-2 px-4">{building}</td>
                       <td className="py-2 px-4">{room}</td>
                       <td className="py-2 px-4">{date}</td>
                       <td className="py-2 px-4">{timeSlot}</td>
+                      <td className="py-2 px-4">{purpose || '—'}</td>
                       <td className="py-2 px-4">
                         <StatusBadge status={status} />
                       </td>
@@ -104,10 +107,10 @@ const Status = () => {
           {/* Card View for Mobile */}
           <div className="sm:hidden flex flex-col gap-4 mt-4 text-sm">
             {consultationRequests.map(
-              ({ id, building, room, date, timeSlot, status }) => (
+              ({ id, building, room, date, timeSlot, status, purpose }) => (
                 <div
                   key={id}
-                  className="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50"
+                  className="border border-purple-200 rounded-lg p-4 shadow-md bg-white"
                 >
                   <div className="mb-1">
                     <span className="font-medium text-gray-700">Building:</span>{' '}
@@ -124,6 +127,10 @@ const Status = () => {
                   <div className="mb-1">
                     <span className="font-medium text-gray-700">Time Slot:</span>{' '}
                     {timeSlot}
+                  </div>
+                  <div className="mb-1">
+                    <span className="font-medium text-gray-700">Purpose:</span>{' '}
+                    {purpose || '—'}
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Status:</span>{' '}

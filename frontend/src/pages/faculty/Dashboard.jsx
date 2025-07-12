@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import axios from '../../lib/axios'
-import NotificationList from '../../components/NotificationList'
-import Spinner from '../../components/InlineSpinner' // ✅ import here
-import { Link } from 'react-router-dom'
-import NotificationIcon from '../../components/NotificationIcon'
+import React, { useEffect, useState } from 'react';
+import axios from '../../lib/axios';
+import NotificationList from '../../components/NotificationList';
+import Spinner from '../../components/InlineSpinner';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [notifications, setNotifications] = useState([])
-  const [loading, setLoading] = useState(true) // ✅
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -17,58 +16,57 @@ const Dashboard = () => {
         setNotifications([
           {
             id: 1,
-            message: 'Your consultation request was approved.',
+            message: 'New consultation request from a student.',
             read: false,
             created_at: new Date().toISOString(),
           },
           {
             id: 2,
-            message: 'Reminder: Upcoming consultation tomorrow.',
+            message: 'Student responded to your consultation slot.',
             read: true,
             created_at: new Date(Date.now() - 3600 * 1000).toISOString(),
           },
-        ])
+        ]);
       })
-      .finally(() => setLoading(false)) // ✅
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleMarkAsRead = async (id) => {
-    await axios.post(`/notifications/mark-as-read/${id}`)
+    await axios.post(`/notifications/mark-as-read/${id}`);
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    )
-  }
+    );
+  };
 
   return (
     <div className="min-h-screen bg-purple-50 p-6">
       <div className="max-w-7xl m-auto">
-        <h1 className="text-3xl font-bold text-purple-700 mb-6">Welcome, Student!</h1>
-        <NotificationIcon />
+        <h1 className="text-3xl font-bold text-purple-700 mb-6">Welcome, Faculty!</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md border border-purple-200 text-center lg:text-start">
-            <h2 className="text-xl font-semibold mb-2">Consultation Requests</h2>
-            <p className="text-4xl font-bold text-purple-600">3</p>
+            <h2 className="text-xl font-semibold mb-2">Incoming Requests</h2>
+            <p className="text-4xl font-bold text-purple-600">5</p>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md border border-purple-200 text-center lg:text-start">
             <h2 className="text-xl font-semibold mb-2">Upcoming Consultations</h2>
-            <p className="text-4xl font-bold text-purple-600">1</p>
+            <p className="text-4xl font-bold text-purple-600">2</p>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md border border-purple-200 flex flex-col justify-center items-center">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <Link
-              to="/student/schedule"
+              to="/faculty/availability"
               className="mb-3 w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-center"
             >
-              Schedule Consultation
+              Set Availability
             </Link>
             <Link
-              to="/student/status"
+              to="/faculty/consultations/1"
               className="w-full border border-purple-600 text-purple-600 py-2 rounded hover:bg-purple-100 text-center"
             >
-              Track Status
+              View Consultation
             </Link>
           </div>
         </div>
@@ -87,7 +85,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

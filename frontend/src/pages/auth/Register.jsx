@@ -225,7 +225,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2 rounded text-white ${
+          className={`w-full py-2 rounded text-white cursor-pointer ${
             loading ? 'bg-purple-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'
           } transition`}
         >

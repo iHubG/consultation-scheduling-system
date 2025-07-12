@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Spinner from '../components/WholePageSpinner';
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const handleLoad = () => setLoading(false);
+
+    if (document.readyState === 'complete') {
+      setLoading(false);
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-purple-200 flex items-start lg:items-center justify-center px-4 p-5">
       <div className="bg-white rounded-xl shadow-xl p-10 max-w-md w-full text-center">
@@ -11,7 +30,7 @@ const Home = () => {
         <p className="text-gray-600 mb-6">
           Welcome! This system helps students, faculty, and admins efficiently schedule and manage consultations.
         </p>
-        
+
         <div className="flex flex-col gap-4">
           <Link
             to="/login"
