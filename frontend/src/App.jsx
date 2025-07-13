@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div>
       <Outlet /> 
-      <NotificationIcon />
+      {/* <NotificationIcon /> */}
     </div>
   )
 }

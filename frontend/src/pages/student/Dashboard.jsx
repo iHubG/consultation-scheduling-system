@@ -43,7 +43,6 @@ const Dashboard = () => {
     <div className="min-h-screen bg-purple-50 p-6">
       <div className="max-w-7xl m-auto">
         <h1 className="text-3xl font-bold text-purple-700 mb-6">Welcome, Student!</h1>
-        <NotificationIcon />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md border border-purple-200 text-center lg:text-start">
