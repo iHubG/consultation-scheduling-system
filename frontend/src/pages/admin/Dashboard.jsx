@@ -13,12 +13,12 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg shadow p-4">
           <p className="text-sm text-gray-500">Total Users</p>
-          <p className="text-2xl font-semibold text-lavender-600">324</p>
+          <p className="text-2xl font-semibold text-purple-600">324</p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4">
           <p className="text-sm text-gray-500">Total Consultations</p>
-          <p className="text-2xl font-semibold text-lavender-600">87</p>
+          <p className="text-2xl font-semibold text-purple-600">87</p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4">

@@ -18,7 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const items = [
   {
@@ -55,9 +55,9 @@ const items = [
 
 export function AdminSidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
-    // You can add logout logic here (e.g. clear tokens, call API, etc.)
     console.log("Logging out...");
     navigate("/login");
   };
@@ -66,19 +66,30 @@ export function AdminSidebar() {
     <Sidebar className="flex flex-col h-full justify-between">
       <SidebarContent className="flex flex-col flex-grow">
         <SidebarGroup>
-          <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+          <SidebarGroupLabel className="mb-5">Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map(({ title, url, Icon }) => (
-                <SidebarMenuItem key={title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={url} className="flex items-center gap-2">
-                      <Icon className="w-5 h-5" />
-                      <span>{title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map(({ title, url, Icon }) => {
+                const isActive = location.pathname === url;
+
+                return (
+                  <SidebarMenuItem key={title}>
+                    <SidebarMenuButton asChild>
+                      <Link
+                        to={url}
+                        className={`flex items-center gap-2 w-full px-2 py-1.5 rounded-md transition-colors ${
+                          isActive
+                            ? "bg-muted text-primary font-medium"
+                            : "hover:bg-muted/50"
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span>{title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -88,7 +99,10 @@ export function AdminSidebar() {
       <div className="p-4 border-t">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout} className="flex items-center gap-2 w-full text-left cursor-pointer">
+            <SidebarMenuButton
+              onClick={handleLogout}
+              className="flex items-center gap-2 w-full text-left cursor-pointer"
+            >
               <LogOut className="w-5 h-5" />
               <span>Logout</span>
             </SidebarMenuButton>
