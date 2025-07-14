@@ -28,12 +28,12 @@ A web-based platform designed to streamline the scheduling and management of aca
 
 ## 🛠 Tech Stack
 
-| Layer        | Technology                         |
-|--------------|------------------------------------|
-| Frontend     | React, React Router, Tailwind CSS  |
-| Backend/API  | Laravel                            |
-| Database     | MySQL                              |
-| Icons/UI     | Lucide React, Custom UI Components |
+| Layer        | Technology                                                |
+|--------------|-----------------------------------------------------------|
+| Frontend     | React, React Router, Tailwind CSS, ShadcnUI, SweetAlert2  |
+| Backend/API  | Laravel                                                   |
+| Database     | MySQL                                                     |
+| Icons/UI     | Lucide React, Custom UI Components                        |
 
 ---
 
